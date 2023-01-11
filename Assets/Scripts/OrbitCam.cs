@@ -24,8 +24,10 @@ public class OrbitCam : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-            CameraDisabled = !CameraDisabled;
+        if (Input.GetMouseButton(1))
+            CameraDisabled = false;
+        else
+            CameraDisabled = true;
             
         if(!CameraDisabled)
         {
