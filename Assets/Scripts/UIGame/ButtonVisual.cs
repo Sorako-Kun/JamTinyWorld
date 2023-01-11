@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class ButtonVisual : MonoBehaviour
 {
-    public OpenMenu shop;
+    public OpenMenuUI Requirements;
     public Sprite ImageToOpen;
     public Sprite ImageToClose;
     public Image SpriteButton;
 
     void Update()
     {
-        if(shop.IsShopOpen)
+        if(Requirements.IsMenuOpen)
         SpriteButton.sprite = ImageToClose;
         else
         SpriteButton.sprite = ImageToOpen;

@@ -9,15 +9,14 @@ public class ShopMenuUI : MonoBehaviour
     
     bool IsLock = true;
     public Image ImageLock;
+    public TextMeshProUGUI TextCost;
+    public int Cost;
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        
+        TextCost.text = "" + Cost;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!IsLock)
