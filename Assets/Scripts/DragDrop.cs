@@ -9,24 +9,17 @@ public class DragDrop : MonoBehaviour
     Vector3 offset;
     Plane plane = new Plane(Vector3.up, 0);
     public bool takeObject;
+    public bool Grounded;
+    public float ScrollSensitivity = 2f;
     private void OnMouseDown()
     {
         takeObject = !takeObject;
         if(takeObject)
             offset = transform.position - MouseWorldPosition();
-        if (!takeObject)
-        {
-
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, Mathf.Infinity, layerMask))
-            {
-                transform.position = hit.point;
-            }
-        }
     }
     private void OnMouseDrag()
     {
-        if(takeObject)
+        if (takeObject)
             transform.position = MouseWorldPosition() + offset;
     }
 
@@ -42,12 +35,20 @@ public class DragDrop : MonoBehaviour
         {
             var mouseScreenPos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(mouseScreenPos);
-            float enter = 0f;
-            if (plane.Raycast(ray, out enter))
+            RaycastHit Hit;
+            if (Physics.Raycast(ray, out Hit, float.MaxValue, layerMask))
             {
-                transform.position = new Vector3(ray.GetPoint(enter).x, ray.GetPoint(enter).y, ray.GetPoint(enter).z);
+                Debug.DrawRay(Hit.point, transform.TransformDirection(Vector3.up), Color.red, 10f);
+                transform.position = Hit.point;
+                Grounded = true;
+            }
+            else
+                Grounded = false;
+            if (Input.GetAxis("Mouse ScrollWheel") != 0)
+            {
+                float ScrollAmout = Input.GetAxis("Mouse ScrollWheel") * ScrollSensitivity;
+                transform.localRotation = Quaternion.Euler(0, ScrollAmout, 0);
             }
         }
-            
     }
 }

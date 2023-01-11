@@ -38,7 +38,7 @@ public class OrbitCam : MonoBehaviour
 
                 _LocalRotation.y = Mathf.Clamp(_LocalRotation.y, 0f, 90f);
             }
-            if(Input.GetAxis("Mouse ScrollWheel") != 0)
+            if (Input.GetAxis("Mouse ScrollWheel") != 0)
             {
                 float ScrollAmout = Input.GetAxis("Mouse ScrollWheel") * ScrollSensitivity;
 
@@ -47,6 +47,7 @@ public class OrbitCam : MonoBehaviour
                 this._CameraDistance = Mathf.Clamp(this._CameraDistance, 1.5f, 100f);
             }
         }
+        
 
         Quaternion QT = Quaternion.Euler(_LocalRotation.y, _LocalRotation.x, 0);
         this._XForm_Parent.rotation = Quaternion.Lerp(this._XForm_Parent.rotation, QT, Time.deltaTime * OrbitSpeed);
