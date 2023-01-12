@@ -3,18 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Type
+{
+    abri,
+    plante,
+    nourriture,
+    decoration
+}
 public class DragDrop : MonoBehaviour
 {
+    public Type type;
     public LayerMask layerMask; 
     Vector3 offset;
     Plane plane = new Plane(Vector3.up, 0);
     public bool takeObject;
-    public bool Grounded;
-    public float ScrollSensitivity = 2f;
+    private bool Grounded;
+    public bool Done;
+    public float ScrollSensitivity = 20f;
     private void OnMouseDown()
     {
-        takeObject = !takeObject;
-        if(takeObject)
+        if(!takeObject)
+            GameManager.instance.SwitchObject(this);
+        if (Input.GetMouseButton(0))
+        {
+            takeObject = !takeObject;
+            Done = false;
+        }
+        if (takeObject)
             offset = transform.position - MouseWorldPosition();
     }
     private void OnMouseDrag()
@@ -31,7 +46,7 @@ public class DragDrop : MonoBehaviour
     }
     private void Update()
     {
-        if (takeObject)
+        if (takeObject && !Done)
         {
             var mouseScreenPos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(mouseScreenPos);
@@ -46,9 +61,23 @@ public class DragDrop : MonoBehaviour
                 Grounded = false;
             if (Input.GetAxis("Mouse ScrollWheel") != 0)
             {
-                float ScrollAmout = Input.GetAxis("Mouse ScrollWheel") * ScrollSensitivity;
-                transform.localRotation = Quaternion.Euler(0, ScrollAmout, 0);
+                transform.Rotate(Vector3.up * ScrollSensitivity * Input.GetAxis("Mouse ScrollWheel"));
             }
+            
+        }
+        if(Grounded && !Done)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
+            }if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                transform.position = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            Done = true;
         }
     }
 }
